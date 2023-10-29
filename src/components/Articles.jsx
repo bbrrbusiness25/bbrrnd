@@ -3,7 +3,8 @@ import axios from "axios";
 
 const Articles = () => {
   const [newsData, setNewsData] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("All"); // Set "All" as the default category
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchNewsData = async () => {
@@ -20,21 +21,30 @@ const Articles = () => {
     fetchNewsData();
   }, []);
 
-  const filteredNewsData =
-    selectedCategory === "All" // Check for "All" as the filter
-      ? newsData
-      : newsData.filter(
-          (article) => article.attributes.category === selectedCategory
-        );
+  const filteredNewsData = newsData.filter((article) => {
+    const categoryMatch =
+      selectedCategory === "All" ||
+      article.attributes.category === selectedCategory;
+    const searchMatch =
+      searchQuery === "" ||
+      article.attributes.headline
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+    return categoryMatch && searchMatch;
+  });
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
   };
 
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
   return (
     <div className="mx-auto max-w-7xl px-2 py-10">
       <div className="flex flex-col space-y-8 pb-10 pt-12 md:pt-24">
-        <p className="text-3xl font-bold text-gray-900 md:text-5xl md:leading-10">
+        <p className="text-3xl font-bold text-green-500 md:text-5xl md:leading-10">
           Explore the Latest Headlines
         </p>
         <p className="max-w-4xl text-base text-gray-600 md:text-xl">
@@ -48,10 +58,12 @@ const Articles = () => {
             className="flex h-10 w-full rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
             type="text"
             placeholder="Search Topics"
-          ></input>
+            value={searchQuery}
+            onChange={handleSearch}
+          />
           <button
             type="button"
-            className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+            className="rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
           >
             Search
           </button>
@@ -64,7 +76,7 @@ const Articles = () => {
               <div
                 className={`cursor-pointer px-4 py-2 text-base font-semibold leading-normal text-gray-700  ${
                   filter === selectedCategory
-                    ? "text-black border-b-2 border-black"
+                    ? "text-green-500 border-b-2 border-green-500"
                     : ""
                 }`}
                 key={filter}
@@ -80,15 +92,20 @@ const Articles = () => {
       <div className="grid gap-6 gap-y-10 py-6 md:grid-cols-2 lg:grid-cols-3">
         {filteredNewsData &&
           filteredNewsData.map((article) => (
-            <div key={article.id} className="border">
+            <div
+              key={article.id}
+              className="border border-green-500 rounded-md p-2"
+            >
               <img
                 src={article.attributes.newsIcon}
                 className="aspect-video w-full rounded-md"
                 alt=""
               />
               <div className="min-h-min p-3">
-                <p className="mt-4 w-full text-xs font-semibold leading-tight text-gray-700">
-                  #{article.attributes.category}
+                <p className="mt-4 w-full text-xs font-semibold leading-tight text-white flex">
+                  <span className="bg-green-500 px-2 py-1 rounded-2xl">
+                    #{article.attributes.category}
+                  </span>
                 </p>
                 <p className="mt-4 flex-1 text-base font-semibold text-gray-900">
                   {article.attributes.headline}

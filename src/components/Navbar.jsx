@@ -26,7 +26,7 @@ const Navbar = () => {
     <header className="fixed bg-white z-50 w-full border-b text-black border-black/10">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
         <div className="inline-flex items-center space-x-2">
-          <span>
+          <span className="bg-green-500 text-white rounded-full p-[7px]">
             <Newspaper />
           </span>
           <span className="font-bold">Insights</span>
@@ -50,7 +50,7 @@ const Navbar = () => {
             href="https://github.com/shaikahmadnawaz/news-dashboard"
             target="_blank"
             rel="noreferrer"
-            className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+            className="rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
           >
             GitHub
           </a>
@@ -67,7 +67,7 @@ const Navbar = () => {
                     <span>
                       <Newspaper />
                     </span>
-                    <span className="font-bold">DevUI</span>
+                    <span className="font-bold">Insights</span>
                   </div>
                   <div className="-mr-2">
                     <button
@@ -99,7 +99,7 @@ const Navbar = () => {
                   href="https://github.com/shaikahmadnawaz/news-dashboard"
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-4 w-full rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                  className="mt-4 w-full rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
                 >
                   GitHub
                 </a>

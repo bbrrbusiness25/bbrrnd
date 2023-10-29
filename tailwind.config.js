@@ -11,11 +11,11 @@ export default {
         xl: "1200px",
         "2xl": "1440px",
       },
-      colors: {
-        white: "#EFFFFB",
-        green: "#50D890",
-        black: "#272727",
-      },
+      // colors: {
+      //   white: "#EFFFFB",
+      //   green: "#50D890",
+      //   black: "#272727",
+      // },
     },
   },
   plugins: [],
