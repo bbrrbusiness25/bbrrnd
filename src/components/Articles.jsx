@@ -3,6 +3,7 @@ import axios from "axios";
 
 const Articles = () => {
   const [newsData, setNewsData] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("All"); // Set "All" as the default category
 
   useEffect(() => {
     const fetchNewsData = async () => {
@@ -18,6 +19,17 @@ const Articles = () => {
 
     fetchNewsData();
   }, []);
+
+  const filteredNewsData =
+    selectedCategory === "All" // Check for "All" as the filter
+      ? newsData
+      : newsData.filter(
+          (article) => article.attributes.category === selectedCategory
+        );
+
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+  };
 
   return (
     <div className="mx-auto max-w-7xl px-2 py-10">
@@ -47,11 +59,16 @@ const Articles = () => {
       </div>
       <div className="mt-10 hidden w-full flex-col justify-between space-y-4 md:flex md:flex-row">
         <div className="flex w-full items-end border-b border-gray-300">
-          {["SPORTS", "POLITICS", "WORLD", "TECHNOLOGY", "HEALTH"].map(
+          {["All", "SPORTS", "POLITICS", "WORLD", "TECHNOLOGY", "HEALTH"].map(
             (filter) => (
               <div
-                className="cursor-pointer px-4 py-2 text-base font-semibold leading-normal text-gray-700 first:border-b-2 first:border-black"
+                className={`cursor-pointer px-4 py-2 text-base font-semibold leading-normal text-gray-700  ${
+                  filter === selectedCategory
+                    ? "text-black border-b-2 border-black"
+                    : ""
+                }`}
                 key={filter}
+                onClick={() => handleCategorySelect(filter)}
               >
                 {filter}
               </div>
@@ -59,44 +76,36 @@ const Articles = () => {
           )}
         </div>
       </div>
-      
+
       <div className="grid gap-6 gap-y-10 py-6 md:grid-cols-2 lg:grid-cols-3">
-        {newsData &&
-          newsData.map(
-            (article) => (
-              
-              (
-                <div key={article.id} className="border">
-                  <img
-                    src={article.attributes.newsIcon} 
-                    className="aspect-video w-full rounded-md"
-                    alt=""
-                  />
-                  <div className="min-h-min p-3">
-                    <p className="mt-4 w-full text-xs font-semibold leading-tight text-gray-700">
-                      #{article.attributes.category}
+        {filteredNewsData &&
+          filteredNewsData.map((article) => (
+            <div key={article.id} className="border">
+              <img
+                src={article.attributes.newsIcon}
+                className="aspect-video w-full rounded-md"
+                alt=""
+              />
+              <div className="min-h-min p-3">
+                <p className="mt-4 w-full text-xs font-semibold leading-tight text-gray-700">
+                  #{article.attributes.category}
+                </p>
+                <p className="mt-4 flex-1 text-base font-semibold text-gray-900">
+                  {article.attributes.headline}
+                </p>
+                <div className="mt-4 flex space-x-3">
+                  <div>
+                    <p className="text-sm font-semibold leading-tight text-gray-900">
+                      {article.attributes.newsSource}
                     </p>
-                    <p className="mt-4 flex-1 text-base font-semibold text-gray-900">
-                      {article.attributes.headline}
+                    <p className="text-sm leading-tight text-gray-600">
+                      {new Date(article.attributes.publishedAt).toDateString()}{" "}
                     </p>
-                    <div className="mt-4 flex space-x-3">
-                      <div>
-                        <p className="text-sm font-semibold leading-tight text-gray-900">
-                          {article.attributes.newsSource}
-                        </p>
-                        <p className="text-sm leading-tight text-gray-600">
-                          {new Date(
-                            article.attributes.publishedAt
-                          ).toDateString()}{" "}
-                          
-                        </p>
-                      </div>
-                    </div>
                   </div>
                 </div>
-              )
-            )
-          )}
+              </div>
+            </div>
+          ))}
       </div>
       <div className="w-full border-t border-gray-300">
         <div className="mt-2 flex items-center justify-between">
