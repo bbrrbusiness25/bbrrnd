@@ -23,7 +23,7 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
   return (
-    <header className="relative w-full border-b text-black border-black/10">
+    <header className="fixed bg-white z-50 w-full border-b text-black border-black/10">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
         <div className="inline-flex items-center space-x-2">
           <span>
