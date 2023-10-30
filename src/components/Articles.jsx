@@ -5,6 +5,7 @@ const Articles = () => {
   const [newsData, setNewsData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     const fetchNewsData = async () => {
@@ -21,17 +22,21 @@ const Articles = () => {
     fetchNewsData();
   }, []);
 
-  const filteredNewsData = newsData.filter((article) => {
-    const categoryMatch =
-      selectedCategory === "All" ||
-      article.attributes.category === selectedCategory;
-    const searchMatch =
-      searchQuery === "" ||
-      article.attributes.headline
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
-    return categoryMatch && searchMatch;
-  });
+  useEffect(() => {
+    const filteredNewsData = newsData.filter((article) => {
+      const categoryMatch =
+        selectedCategory === "All" ||
+        article.attributes.category === selectedCategory;
+      const searchMatch =
+        searchQuery === "" ||
+        article.attributes.headline
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase());
+      return categoryMatch && searchMatch;
+    });
+
+    setFilteredData(filteredNewsData);
+  }, [searchQuery, selectedCategory, newsData]);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -52,22 +57,13 @@ const Articles = () => {
           across the globe. Our news dashboard provides you with a curated
           selection of news articles, covering a wide range of categories.
         </p>
-
-        <div className="mt-6 flex w-full items-center space-x-2 md:w-1/3">
-          <input
-            className="flex h-10 w-full rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-            type="text"
-            placeholder="Search Topics"
-            value={searchQuery}
-            onChange={handleSearch}
-          />
-          <button
-            type="button"
-            className="rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-          >
-            Search
-          </button>
-        </div>
+        <input
+          className="mt-6 flex h-10 w-full md:w-1/3 rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+          type="text"
+          placeholder="Search by headline..."
+          value={searchQuery}
+          onChange={handleSearch}
+        />
       </div>
       <div className="mt-10 hidden w-full flex-col justify-between space-y-4 md:flex md:flex-row">
         <div className="flex w-full items-end border-b border-gray-300">
@@ -90,39 +86,38 @@ const Articles = () => {
       </div>
 
       <div className="grid gap-6 gap-y-10 py-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredNewsData &&
-          filteredNewsData.map((article) => (
-            <div
-              key={article.id}
-              className="border border-green-500 rounded-md p-2"
-            >
-              <img
-                src={article.attributes.newsIcon}
-                className="aspect-video w-full rounded-md"
-                alt=""
-              />
-              <div className="min-h-min p-3">
-                <p className="mt-4 w-full text-xs font-semibold leading-tight text-white flex">
-                  <span className="bg-green-500 px-2 py-1 rounded-2xl">
-                    #{article.attributes.category}
-                  </span>
-                </p>
-                <p className="mt-4 flex-1 text-base font-semibold text-gray-900">
-                  {article.attributes.headline}
-                </p>
-                <div className="mt-4 flex space-x-3">
-                  <div>
-                    <p className="text-sm font-semibold leading-tight text-gray-900">
-                      {article.attributes.newsSource}
-                    </p>
-                    <p className="text-sm leading-tight text-gray-600">
-                      {new Date(article.attributes.publishedAt).toDateString()}{" "}
-                    </p>
-                  </div>
+        {filteredData.map((article) => (
+          <div
+            key={article.id}
+            className="border border-green-500 rounded-md p-2"
+          >
+            <img
+              src={article.attributes.newsIcon}
+              className="aspect-video w-full rounded-md"
+              alt=""
+            />
+            <div className="min-h-min p-3">
+              <p className="mt-4 w-full text-xs font-semibold leading-tight text-white flex">
+                <span className="bg-green-500 px-2 py-1 rounded-2xl">
+                  #{article.attributes.category}
+                </span>
+              </p>
+              <p className="mt-4 flex-1 text-base font-semibold text-gray-900">
+                {article.attributes.headline}
+              </p>
+              <div className="mt-4 flex space-x-3">
+                <div>
+                  <p className="text-sm font-semibold leading-tight text-gray-900">
+                    {article.attributes.newsSource}
+                  </p>
+                  <p className="text-sm leading-tight text-gray-600">
+                    {new Date(article.attributes.publishedAt).toDateString()}{" "}
+                  </p>
                 </div>
               </div>
             </div>
-          ))}
+          </div>
+        ))}
       </div>
       <div className="w-full border-t border-gray-300">
         <div className="mt-2 flex items-center justify-between">
