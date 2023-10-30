@@ -23,7 +23,7 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
   return (
-    <header className="fixed bg-white z-50 w-full border-b text-black border-black/10">
+    <header className="fixed bg-white z-50 w-full border-b text-black border-gray-300">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
         <div className="inline-flex items-center space-x-2">
           <span className="bg-green-500 text-white rounded-full p-[7px]">
@@ -64,7 +64,7 @@ const Navbar = () => {
               <div className="px-5 pb-6 pt-5">
                 <div className="flex items-center justify-between">
                   <div className="inline-flex items-center space-x-2">
-                    <span>
+                    <span className="bg-green-500 text-white rounded-full p-[7px]">
                       <Newspaper />
                     </span>
                     <span className="font-bold">Insights</span>
